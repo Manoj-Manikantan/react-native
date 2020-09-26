@@ -3,7 +3,7 @@ import { Button, Picker, StyleSheet, Text, TextInput, TouchableOpacity, View, Al
 
 export default function App() {
 
-  const[dropdownValue, setDropdownValue] = useState('SIS')
+  const[dropdownValue, setDropdownValue] = useState('SI')
   const[heightValue, setHeightValue] = useState('');
   const[weightValue, setWeightValue] = useState('');
   const[bmiValue, setBmiValue] = useState(0);
