@@ -3,12 +3,17 @@ import { Picker, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'rea
 
 export default function App() {
 
+  /* Declaration */
   const [dropdownValue, setDropdownValue] = useState('SI')
   const [heightValue, setHeightValue] = useState('');
   const [weightValue, setWeightValue] = useState('');
   const [bmiValue, setBmiValue] = useState(0);
   const [bmiResult, setBmiResult] = useState('');
 
+  /* 1. Checking if value is number or not
+     2. Calculating bmi values
+     3. Calculating bmi category
+  */
   const calculateBMI = (height, weight) => {
     if (isNaN(height) || isNaN(weight)) {
       alert('Incorrect input');
