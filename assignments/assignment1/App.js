@@ -42,10 +42,12 @@ export default function App() {
     }
   }
 
+  /* Clearing values */
   const clearValues = () => {
     setHeightValue('')
     setWeightValue('')
     setBmiValue(0)
+    setBmiResult('')
   }
 
   return (
@@ -62,14 +64,14 @@ export default function App() {
       </Picker><br /><br />
       <Text>Height</Text>
       <TextInput style={styles.inputBox}
-        placeholder={dropdownValue == "SI" ? "Cms" : "Inches"}
+        placeholder={dropdownValue == "SI" ? " Cms" : " Inches"}
         onChangeText={text => setHeightValue(text)}
         clearTextOnFocus="true"
         value={heightValue}
       />
       <Text>Weight</Text>
       <TextInput style={styles.inputBox}
-        placeholder={dropdownValue == "SI" ? "Kgs" : "Lbs"}
+        placeholder={dropdownValue == "SI" ? " Kgs" : " Lbs"}
         onChangeText={text => setWeightValue(text)}
         clearTextOnFocus="true"
         value={weightValue}
