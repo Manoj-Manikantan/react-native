@@ -53,7 +53,14 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>BMI Calculator</Text><br />
-      <Text>Measurement System</Text>
+      <Text style={styles.sideHeadings}>BMI Categories: </Text>
+      <Text>
+        Underweight = less than 18.5{"\n"}
+        Normal weight = 18.5 – 24.9{"\n"}
+        Overweight = 25 – 29.9{"\n"}
+        Obesity = BMI of 30 or greater{"\n\n"}
+      </Text>
+      <Text style={styles.sideHeadings}>Measurement System</Text>
       <Picker
         style={styles.centreTextAlign}
         selectedValue={dropdownValue}
@@ -62,14 +69,14 @@ export default function App() {
         <Picker.Item label="SI [ Cms, Kgs ]" value="SI" />
         <Picker.Item label="Imperial [ Inches, Lbs ]" value="Imperial" />
       </Picker><br /><br />
-      <Text>Height</Text>
+      <Text style={styles.sideHeadings}>Height</Text>
       <TextInput style={styles.inputBox}
         placeholder={dropdownValue == "SI" ? " Cms" : " Inches"}
         onChangeText={text => setHeightValue(text)}
         clearTextOnFocus="true"
         value={heightValue}
       />
-      <Text>Weight</Text>
+      <Text style={styles.sideHeadings}>Weight</Text>
       <TextInput style={styles.inputBox}
         placeholder={dropdownValue == "SI" ? " Kgs" : " Lbs"}
         onChangeText={text => setWeightValue(text)}
@@ -142,5 +149,8 @@ const styles = StyleSheet.create({
   },
   centreTextAlign: {
     textAlign: 'center'
+  },
+  sideHeadings: {
+    fontWeight: 'bold'
   }
 });
