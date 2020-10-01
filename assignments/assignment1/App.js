@@ -52,7 +52,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>BMI Calculator</Text><br />
+      <Text style={styles.title}>BMI Calculator{"\n\n"}</Text>
       <Text style={styles.sideHeadings}>BMI Categories: </Text>
       <Text>
         Underweight = less than 18.5{"\n"}
@@ -68,8 +68,8 @@ export default function App() {
       >
         <Picker.Item label="SI [ Cms, Kgs ]" value="SI" />
         <Picker.Item label="Imperial [ Inches, Lbs ]" value="Imperial" />
-      </Picker><br /><br />
-      <Text style={styles.sideHeadings}>Height</Text>
+      </Picker>
+      <Text style={styles.sideHeadings}>{"\n\n"}Height</Text>
       <TextInput style={styles.inputBox}
         placeholder={dropdownValue == "SI" ? " Cms" : " Inches"}
         onChangeText={text => setHeightValue(text)}
