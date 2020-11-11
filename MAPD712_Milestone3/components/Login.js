@@ -5,13 +5,62 @@ Description : Login Screen
 */
 
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import logoIcon from '../src/images/app_logo.png'
 import usernameIcon from '../src/images/ic_user.png'
 import passwordIcon from '../src/images/ic_password.png'
-import { StyleSheet, TextInput, Image, TouchableOpacity, Text, View } from 'react-native';
+import { StyleSheet, TextInput, Image, TouchableOpacity, Text, View, Alert } from 'react-native';
+import { API_URL } from '../constants/apiURL'
 
 export default function Login({ navigation }) {
+
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
+  const [loginData, setLoginData] = useState('')
+
+  const signInClicked = () => {
+    if (userName != '' && password != '') {
+      try {
+        fetch(API_URL + "/doctor/login", {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userName: userName,
+            password: password
+          })
+        })
+          .then(response => response.json())
+          .then(responseJson => {
+            setLoginData(responseJson)
+          })
+          .catch(error => console.log(error))
+      } catch (e) {
+        console.log(e)
+      }
+      console.log(loginData.statusCode)
+      if (loginData.statusCode == "202") {
+        Alert.alert('Username does not exist. Please proceed to SignUp.')
+        setUserName('')
+        setPassword('')
+      }
+      else if(loginData.statusCode == "201"){
+        Alert.alert('Invalid Username (or) Password!')
+      }
+      else if(loginData.statusCode == "200") {
+        Alert.alert('Login successful')
+        navigation.navigate("PatientsList")
+      }
+    }
+    else {
+      console.log(userName + " " + email + " " + password)
+      Alert.alert('Please fill all the fields before submitting.')
+    }
+  }
+
   return (
     <View style={styles.containerBody}>
       <StatusBar style="auto" />
@@ -24,6 +73,8 @@ export default function Login({ navigation }) {
           <Image style={styles.inputIcon} source={usernameIcon} />
           <TextInput
             style={styles.input}
+            value={userName}
+            onChangeText={txt => setUserName(txt)}
             placeholder={'Username'}
             placeholderTextColor="#78909c" />
         </View>
@@ -31,12 +82,14 @@ export default function Login({ navigation }) {
           <Image style={styles.inputIcon} source={passwordIcon} />
           <TextInput
             style={styles.input}
+            value={password}
+            onChangeText={txt => setPassword(txt)}
             placeholder={'Password'}
             placeholderTextColor="#78909c" />
         </View>
       </View>
-      <TouchableOpacity style={styles.containerButton}>
-        <Text onPress={() => navigation.navigate("PatientsList")} style={styles.buttonText}>Sign In</Text>
+      <TouchableOpacity onPress={signInClicked} style={styles.containerButton}>
+        <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <View style={styles.containerLabel}>
         <Text style={styles.label}>Don't have an account?  </Text>
