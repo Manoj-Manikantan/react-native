@@ -48,6 +48,7 @@ export default function AddPatient({ navigation }) {
             } catch (e) {
                 console.log(e)
             }
+            console.log(res)
             Alert.alert('Patient added successfully.')
             navigation.navigate("PatientsList")
         }

@@ -41,7 +41,6 @@ export default function Login({ navigation }) {
       } catch (e) {
         console.log(e)
       }
-      console.log(loginData.statusCode)
       if (loginData.statusCode == "202") {
         Alert.alert('Username does not exist. Please proceed to SignUp.')
         setUserName('')
@@ -56,7 +55,6 @@ export default function Login({ navigation }) {
       }
     }
     else {
-      console.log(userName + " " + email + " " + password)
       Alert.alert('Please fill all the fields before submitting.')
     }
   }

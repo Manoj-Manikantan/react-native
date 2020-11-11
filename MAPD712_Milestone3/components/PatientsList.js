@@ -9,12 +9,12 @@ import React, { useEffect, useState } from 'react';
 import maleAvatarIcon from '../src/images/ic_avatar_male.png'
 import rightArrowIcon from '../src/images/ic_right_arrow.png'
 import floatingButtonIcon from '../src/images/ic_floating_button.png'
-import { StyleSheet, Image, TouchableOpacity, Text, View } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Text, View, Alert } from 'react-native';
 import { API_URL } from '../constants/apiURL'
 
 export default function PatientsList({ navigation }) {
 
-  const [patientList, setPatientList] = useState([""]);
+  const [patientResponse, setPatientResponse] = useState('');
 
   useEffect(() => {
     getAllPatients()
@@ -32,7 +32,8 @@ export default function PatientsList({ navigation }) {
       })
         .then(response => response.json())
         .then(responseJson => {
-          setPatientList(responseJson)
+          setPatientResponse(responseJson)
+          getAllPatientDetails()
         })
         .catch(error => console.log(error))
     } catch (e) {
@@ -40,31 +41,49 @@ export default function PatientsList({ navigation }) {
     }
   }
 
-  return (
-    <View style={styles.containerBody}>
-      <StatusBar style="auto" />
-      <View style={styles.containerForm}>
-        {patientList.map((resultValue, index) =>
-          <View key={index}>
-            <View style={styles.containerInput}>
-              <Image style={styles.listIcon} source={maleAvatarIcon} />
-              <View style={styles.containerLabel}>
-                <Text style={styles.labelUsername}>Name : {resultValue.fullName}</Text>
-                <Text style={styles.labelAge}>Age : {resultValue.age}</Text>
-                <Text style={styles.labelMobile}>Phone Number : {resultValue.mobileNum}</Text>
+  const getAllPatientDetails = () => {
+    patientResponse.patient.map((resultValue, index) =>
+      console.log(resultValue))
+  }
+  if (patientResponse.statusCode == '200') {
+    return (
+      <View style={styles.containerBody}>
+        <StatusBar style="auto" />
+        <View style={styles.containerForm}>
+          {patientResponse.patient.map((resultValue, index) =>
+            <View key={index}>
+              <View style={styles.containerInput}>
+                <Image style={styles.listIcon} source={maleAvatarIcon} />
+                <View style={styles.containerLabel}>
+                  <Text style={styles.labelUsername}>Name : {resultValue.address}</Text>
+                  <Text style={styles.labelAge}>Age : {resultValue.age}</Text>
+                  <Text style={styles.labelMobile}>Phone Number : {resultValue.mobileNum}</Text>
+                </View>
+                <Image style={styles.listSmallIcon} source={rightArrowIcon} />
               </View>
-              <Image style={styles.listSmallIcon} source={rightArrowIcon} />
             </View>
-          </View>
-        )}
+          )}
+        </View>
+        <View style={styles.containerFloating}>
+          <TouchableOpacity onPress={() => navigation.navigate("AddPatient")}>
+            <Image style={styles.listIcon} source={floatingButtonIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.containerFloating}>
-        <TouchableOpacity onPress={() => navigation.navigate("AddPatient")}>
-          <Image style={styles.listIcon} source={floatingButtonIcon} />
-        </TouchableOpacity>
+    );
+  }
+  else {
+    return (
+      <View style={styles.containerBody}>
+        <StatusBar style="auto" />
+        <View style={styles.containerFloating}>
+          <TouchableOpacity onPress={() => navigation.navigate("AddPatient")}>
+            <Image style={styles.listIcon} source={floatingButtonIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
