@@ -32,7 +32,6 @@ export default function PatientsList({ navigation }) {
       })
         .then(response => response.json())
         .then(responseJson =>{
-          // console.log('getting data from fetch', responseJson)
           setPatientList(responseJson)
           arrayCheck()
         })

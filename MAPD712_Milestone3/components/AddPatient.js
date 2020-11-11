@@ -27,7 +27,7 @@ export default function AddPatient({ navigation }) {
         try {
             fetch(API_URL + "/patients", {
                 method: 'POST',
-                mode: 'cors',
+                mode: 'no-cors',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
