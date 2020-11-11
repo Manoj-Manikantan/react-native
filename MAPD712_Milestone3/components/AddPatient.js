@@ -5,17 +5,17 @@ Description : Add Patient Screen
 */
 
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import usernameIcon from '../src/images/ic_user.png'
 import emailIcon from '../src/images/ic_email.png'
 import phoneIcon from '../src/images/ic_phone.png'
 import addressIcon from '../src/images/ic_address.png'
 import addPatientIcon from '../src/images/ic_addPatient.png'
 import { StyleSheet, TextInput, Image, TouchableOpacity, Text, View, Picker } from 'react-native';
-
+import { API_URL } from '../constants/apiURL'
+import addPatientApi from '../api/addPatient'
 
 export default function AddPatient({ navigation }) {
-
 
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
@@ -26,28 +26,46 @@ export default function AddPatient({ navigation }) {
 
     const onAddPatientClicked = () => {
 
-        try {
-            fetch("http://192.168.1.6:4000/patients", {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    fullName: userName,
-                    email: email,
-                    mobileNum: phoneNum,
-                    age: age,
-                    bloodType: "B+",
-                    address: address,
-                })
-            })
-                .then(response => response.json())
-                .then(responseJson => console.log('getting data from fetch', responseJson))
-                .catch(error => console.log(error))
-        } catch (e) {
-            console.log(e)
+        // try {
+        //     fetch(API_URL + "/patients", {
+        //         method: 'POST',
+        //         headers: {
+        //             Accept: 'application/json',
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({
+        //             fullName: userName,
+        //             email: email,
+        //             mobileNum: phoneNum,
+        //             age: age,
+        //             bloodType: bloodType,
+        //             address: address,
+        //         })
+        //     })
+        //         .then(response => response.json())
+        //         .then(responseJson => console.log('getting data from fetch', responseJson))
+        //         .catch(error => console.log(error))
+        // } catch (e) {
+        //     console.log(e)
+        // }
+
+        console.log("Button Clicked!")
+        const addPatientData = {
+            "fullName": userName,
+            "email": email,
+            "mobileNum": phoneNum,
+            "age": age,
+            "bloodType": bloodType,
+            "address": address
         }
+        addPatientApi(addPatientData)
+            .then(res => {
+                const { data } = res
+                console.log(data);
+            })
+            .catch(err => {
+                console.log("Error caught!");
+            })
     }
 
     return (
@@ -88,11 +106,11 @@ export default function AddPatient({ navigation }) {
                         onChangeText={txt => setAge(txt)}
                         placeholderTextColor="#78909c" />
                     <View style={styles.containerPicker}>
-                    <TextInput
-                        style={styles.smallInput}
-                        placeholder={'Blood Type'}
-                        onChangeText={txt => setBloodType(txt)}
-                        placeholderTextColor="#78909c" />
+                        <TextInput
+                            style={styles.smallInput}
+                            placeholder={'Blood Type'}
+                            onChangeText={txt => setBloodType(txt)}
+                            placeholderTextColor="#78909c" />
                     </View>
                 </View>
                 <View style={styles.containerInput}>
@@ -178,7 +196,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     smallInput: {
-        flex:1,
+        flex: 1,
         fontSize: 18,
         borderBottomWidth: 1,
         borderBottomColor: '#fff',
