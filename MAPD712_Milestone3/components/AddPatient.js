@@ -13,7 +13,6 @@ import addressIcon from '../src/images/ic_address.png'
 import addPatientIcon from '../src/images/ic_addPatient.png'
 import { StyleSheet, TextInput, Image, TouchableOpacity, Text, View, Picker } from 'react-native';
 import { API_URL } from '../constants/apiURL'
-import addPatientApi from '../api/addPatient'
 
 export default function AddPatient({ navigation }) {
 
@@ -25,47 +24,29 @@ export default function AddPatient({ navigation }) {
     const [bloodType, setBloodType] = useState('');
 
     const onAddPatientClicked = () => {
-
-        // try {
-        //     fetch(API_URL + "/patients", {
-        //         method: 'POST',
-        //         headers: {
-        //             Accept: 'application/json',
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             fullName: userName,
-        //             email: email,
-        //             mobileNum: phoneNum,
-        //             age: age,
-        //             bloodType: bloodType,
-        //             address: address,
-        //         })
-        //     })
-        //         .then(response => response.json())
-        //         .then(responseJson => console.log('getting data from fetch', responseJson))
-        //         .catch(error => console.log(error))
-        // } catch (e) {
-        //     console.log(e)
-        // }
-
-        console.log("Button Clicked!")
-        const addPatientData = {
-            "fullName": userName,
-            "email": email,
-            "mobileNum": phoneNum,
-            "age": age,
-            "bloodType": bloodType,
-            "address": address
+        try {
+            fetch(API_URL + "/patients", {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fullName: userName,
+                    email: email,
+                    mobileNum: phoneNum,
+                    age: age,
+                    bloodType: bloodType,
+                    address: address,
+                })
+            })
+                .then(response => response.json())
+                .then(responseJson => console.log('getting data from fetch', responseJson))
+                .catch(error => console.log(error))
+        } catch (e) {
+            console.log(e)
         }
-        addPatientApi(addPatientData)
-            .then(res => {
-                const { data } = res
-                console.log(data);
-            })
-            .catch(err => {
-                console.log("Error caught!");
-            })
     }
 
     return (

@@ -5,47 +5,70 @@ Description : List of patients screen
 */
 
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import maleAvatarIcon from '../src/images/ic_avatar_male.png'
 import rightArrowIcon from '../src/images/ic_right_arrow.png'
-import femaleAvatarIcon from '../src/images/ic_avatar_female.png'
 import floatingButtonIcon from '../src/images/ic_floating_button.png'
 import { StyleSheet, Image, TouchableOpacity, Text, View } from 'react-native';
+import { API_URL } from '../constants/apiURL'
 
 export default function PatientsList({ navigation }) {
+
+  const [patientList, setPatientList] = useState([]);
+
+  useEffect(() => {
+    getAllPatients()
+  }, []);
+
+  const getAllPatients = () => {
+    try {
+      fetch(API_URL + "/patients", {
+        method: 'GET',
+        mode: 'no-cors',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
+        .then(response => response.json())
+        .then(responseJson =>{
+          // console.log('getting data from fetch', responseJson)
+          setPatientList(responseJson)
+          arrayCheck()
+        })
+        .catch(error => console.log(error))
+    } catch (e) {
+      console.log(e)
+    }
+
+  }
+
+  const arrayCheck = () => {
+    if (patientList != "") {
+      console.log("I'm here: " + patientList)
+      patientList.map((resultValue) =>
+        console.log("here " + resultValue.mobileNum + "\n" + resultValue.email)
+      )
+    }
+  }
+
   return (
     <View style={styles.containerBody}>
       <StatusBar style="auto" />
       <View style={styles.containerForm}>
-        <View style={styles.containerInput}>
-          <Image style={styles.listIcon} source={femaleAvatarIcon} />
-          <View style={styles.containerLabel}>
-            <Text style={styles.labelUsername}> Anna Watson  </Text>
-            <Text style={styles.labelMobile}>+1 226 338 0980</Text>
-            <Text style={styles.labelVisit}>Last visited March 23, 2020</Text>
-          </View>
-          <Image style={styles.listSmallIcon} source={rightArrowIcon} />
-        </View>
+        {patientList.map((resultValue, index) =>
+        <View key={index}>
         <View style={styles.containerInput}>
           <Image style={styles.listIcon} source={maleAvatarIcon} />
           <View style={styles.containerLabel}>
-            <Text style={styles.labelUsername}> John Snow  </Text>
-            <Text style={styles.labelMobile}>+1 226 669 9980</Text>
-            <Text style={styles.labelVisit}>Last visited Feb 22, 2020</Text>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate("PatientInformation")}>
-            <Image style={styles.listSmallIcon} source={rightArrowIcon} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.containerInput}>
-          <Image style={styles.listIcon} source={maleAvatarIcon} />
-          <View style={styles.containerLabel}>
-            <Text style={styles.labelUsername}> Agent Hunt  </Text>
-            <Text style={styles.labelMobile}>+1 226 667 8900</Text>
-            <Text style={styles.labelVisit}>Last visited Jan 01, 2020</Text>
+            <Text style={styles.labelUsername}>Name : {resultValue.fullName}</Text>
+            <Text style={styles.labelAge}>Age : {resultValue.age}</Text>
+            <Text style={styles.labelMobile}>Phone Number : {resultValue.mobileNum}</Text>
           </View>
           <Image style={styles.listSmallIcon} source={rightArrowIcon} />
         </View>
+        </View>
+        )}
       </View>
       <View style={styles.containerFloating}>
         <TouchableOpacity onPress={() => navigation.navigate("AddPatient")}>
@@ -104,11 +127,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   labelMobile: {
-    marginTop: 5,
     fontSize: 16,
     color: '#78909c',
   },
-  labelVisit: {
+  labelAge: {
     fontSize: 14,
     color: '#78909c',
     fontWeight: '100',
