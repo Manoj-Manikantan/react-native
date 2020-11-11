@@ -31,23 +31,12 @@ export default function PatientsList({ navigation }) {
         }
       })
         .then(response => response.json())
-        .then(responseJson =>{
+        .then(responseJson => {
           setPatientList(responseJson)
-          arrayCheck()
         })
         .catch(error => console.log(error))
     } catch (e) {
       console.log(e)
-    }
-
-  }
-
-  const arrayCheck = () => {
-    if (patientList != "") {
-      console.log("I'm here: " + patientList)
-      patientList.map((resultValue) =>
-        console.log(resultValue.fullName + "\n" + resultValue.age+ "\n" + resultValue.mobileNum)
-      )
     }
   }
 
@@ -56,17 +45,17 @@ export default function PatientsList({ navigation }) {
       <StatusBar style="auto" />
       <View style={styles.containerForm}>
         {patientList.map((resultValue, index) =>
-        <View key={index}>
-        <View style={styles.containerInput}>
-          <Image style={styles.listIcon} source={maleAvatarIcon} />
-          <View style={styles.containerLabel}>
-            <Text style={styles.labelUsername}>Name : {resultValue.fullName}</Text>
-            <Text style={styles.labelAge}>Age : {resultValue.age}</Text>
-            <Text style={styles.labelMobile}>Phone Number : {resultValue.mobileNum}</Text>
+          <View key={index}>
+            <View style={styles.containerInput}>
+              <Image style={styles.listIcon} source={maleAvatarIcon} />
+              <View style={styles.containerLabel}>
+                <Text style={styles.labelUsername}>Name : {resultValue.fullName}</Text>
+                <Text style={styles.labelAge}>Age : {resultValue.age}</Text>
+                <Text style={styles.labelMobile}>Phone Number : {resultValue.mobileNum}</Text>
+              </View>
+              <Image style={styles.listSmallIcon} source={rightArrowIcon} />
+            </View>
           </View>
-          <Image style={styles.listSmallIcon} source={rightArrowIcon} />
-        </View>
-        </View>
         )}
       </View>
       <View style={styles.containerFloating}>
