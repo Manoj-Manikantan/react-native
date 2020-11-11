@@ -11,7 +11,7 @@ import emailIcon from '../src/images/ic_email.png'
 import phoneIcon from '../src/images/ic_phone.png'
 import addressIcon from '../src/images/ic_address.png'
 import addPatientIcon from '../src/images/ic_addPatient.png'
-import { StyleSheet, TextInput, Image, TouchableOpacity, Text, View, Picker } from 'react-native';
+import { StyleSheet, TextInput, Image, TouchableOpacity, Text, View, Picker, Alert } from 'react-native';
 import { API_URL } from '../constants/apiURL'
 
 export default function AddPatient({ navigation }) {
@@ -24,28 +24,36 @@ export default function AddPatient({ navigation }) {
     const [bloodType, setBloodType] = useState('');
 
     const onAddPatientClicked = () => {
-        try {
-            fetch(API_URL + "/patients", {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fullName: userName,
-                    email: email,
-                    mobileNum: phoneNum,
-                    age: age,
-                    bloodType: bloodType,
-                    address: address,
+        if (userName != "" && email != "" && phoneNum != "" && age != "" && address != "" && bloodType != "") {
+            try {
+                fetch(API_URL + "/patients", {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullName: userName,
+                        email: email,
+                        mobileNum: phoneNum,
+                        age: age,
+                        bloodType: bloodType,
+                        address: address,
+                    })
                 })
-            })
-                .then(response => response.json())
-                .then(responseJson => console.log('getting data from fetch', responseJson))
-                .catch(error => console.log(error))
-        } catch (e) {
-            console.log(e)
+                    .then(response => response.json())
+                    .then(responseJson => console.log('getting data from fetch', responseJson))
+                    .catch(error => console.log(error))
+            } catch (e) {
+                console.log(e)
+            }
+            Alert.alert('Patient added successfully.')
+            navigation.navigate("PatientsList")
+        }
+        else{
+            console.log("Else part called")
+            Alert.alert('Please fill all the fields before submitting.')
         }
     }
 

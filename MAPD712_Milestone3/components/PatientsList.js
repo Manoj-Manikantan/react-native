@@ -14,7 +14,7 @@ import { API_URL } from '../constants/apiURL'
 
 export default function PatientsList({ navigation }) {
 
-  const [patientList, setPatientList] = useState([]);
+  const [patientList, setPatientList] = useState([""]);
 
   useEffect(() => {
     getAllPatients()
@@ -46,7 +46,7 @@ export default function PatientsList({ navigation }) {
     if (patientList != "") {
       console.log("I'm here: " + patientList)
       patientList.map((resultValue) =>
-        console.log("here " + resultValue.mobileNum + "\n" + resultValue.email)
+        console.log(resultValue.fullName + "\n" + resultValue.age+ "\n" + resultValue.mobileNum)
       )
     }
   }
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   labelMobile: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#78909c',
   },
   labelAge: {
