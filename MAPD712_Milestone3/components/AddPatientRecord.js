@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     containerForm: {
-        flex: 1,
-        margin:20,
+        margin:20
     },
     containerInput: {
         margin:20,

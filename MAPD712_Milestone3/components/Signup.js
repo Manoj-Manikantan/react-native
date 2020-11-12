@@ -18,47 +18,40 @@ export default function Signup({ navigation }) {
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [signUpData, setSignUpData] = useState('')
 
   const signUpClicked = () => {
     if (userName != '' && email != '' && password != '') {
-      try {
-        fetch(API_URL + "/doctor/signup", {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userName: userName,
-            email: email,
-            password: password
-          })
-        })
-          .then(response => response.json())
-          .then(responseJson => {
-            setSignUpData(responseJson)
-          })
-          .catch(error => console.log(error))
-      } catch (e) {
-        console.log(e)
-      }
-      console.log(signUpData.statusCode)
-      if (signUpData.statusCode == "201") {
-        Alert.alert('Email id already in use')
-        setUserName('')
-        setEmail('')
-        setPassword('')
-      }
-      else if (signUpData.statusCode == "200") {
-        Alert.alert('Doctor Sign Up successful.')
-        navigation.navigate("Login")
-      }
+      signupAPIrequest()
     }
     else {
-      console.log(userName + " " + email + " " + password)
       Alert.alert('Please fill all the fields before submitting.')
+    }
+  }
+
+  const signupAPIrequest = async () => {
+    const response = await fetch(API_URL + "/doctor/signup", {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userName: userName,
+        email: email,
+        password: password
+      })
+    })
+    const signupData = await response.json();
+    if (signupData.statusCode == "201") {
+      Alert.alert('Email id already in use')
+      setUserName('')
+      setEmail('')
+      setPassword('')
+    }
+    else if (signupData.statusCode == "200") {
+      Alert.alert('Doctor Sign Up successful.')
+      navigation.navigate("Login")
     }
   }
 
@@ -119,8 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerForm: {
-    flex: 1,
-    margin: 40,
+    margin: 40
   },
   containerLabel: {
     flexDirection: 'row',

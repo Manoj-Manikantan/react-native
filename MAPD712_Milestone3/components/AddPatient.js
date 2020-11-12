@@ -48,7 +48,6 @@ export default function AddPatient({ navigation }) {
             } catch (e) {
                 console.log(e)
             }
-            console.log(res)
             Alert.alert('Patient added successfully.')
             navigation.navigate("PatientsList")
         }
@@ -129,8 +128,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     containerForm: {
-        flex: 1,
-        margin: 40,
+        margin: 40
     },
     containerLabel: {
         flexDirection: 'row',

@@ -16,46 +16,41 @@ export default function Login({ navigation }) {
 
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
-  const [loginData, setLoginData] = useState('')
 
   const signInClicked = () => {
     if (userName != '' && password != '') {
-      try {
-        fetch(API_URL + "/doctor/login", {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userName: userName,
-            password: password
-          })
-        })
-          .then(response => response.json())
-          .then(responseJson => {
-            setLoginData(responseJson)
-          })
-          .catch(error => console.log(error))
-      } catch (e) {
-        console.log(e)
-      }
-      if (loginData.statusCode == "202") {
-        Alert.alert('Username does not exist. Please proceed to SignUp.')
-        setUserName('')
-        setPassword('')
-      }
-      else if(loginData.statusCode == "201"){
-        Alert.alert('Invalid Username (or) Password!')
-      }
-      else if(loginData.statusCode == "200") {
-        Alert.alert('Login successful')
-        navigation.navigate("PatientsList")
-      }
+      loginAPIrequest()
     }
     else {
       Alert.alert('Please fill all the fields before submitting.')
+    }
+  }
+
+  const loginAPIrequest = async () => {
+    const response = await fetch(API_URL + "/doctor/login", {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userName: userName,
+        password: password
+      })
+    })
+    const loginData = await response.json();
+    if (loginData.statusCode == "202") {
+      Alert.alert('Username does not exist. Please proceed to SignUp.')
+      setUserName('')
+      setPassword('')
+    }
+    else if (loginData.statusCode == "201") {
+      Alert.alert('Invalid Username (or) Password!')
+    }
+    else if (loginData.statusCode == "200") {
+      Alert.alert('Login successful')
+      navigation.navigate("PatientsList")
     }
   }
 
@@ -107,8 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerForm: {
-    flex: 1,
-    margin: 40,
+    margin: 40
   },
   containerLabel: {
     flexDirection: 'row',
