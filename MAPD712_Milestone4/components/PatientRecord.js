@@ -5,76 +5,101 @@ Description : Records of patient screen
 */
 
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Image, Text, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Image, Text, View, TouchableOpacity, ActivityIndicator, FlatList } from 'react-native';
 import floatingButtonIcon from '../src/images/ic_floating_button.png'
+import refreshIcon from '../src/images/ic_refresh.png'
 import { API_URL } from '../constants/apiURL'
 
 export default function PatientRecord({ navigation }) {
 
-    return (
-        <View style={styles.containerBody}>
-            <StatusBar style="auto" />
-            <View style={styles.containerForm}>
-                <View style={styles.containerInput}>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelHeadings}>Blood Pressure :</Text>
-                        <Text style={styles.labelHeadings}>Respiratory Rate :</Text>
-                        <Text style={styles.labelHeadings}>Blood Oxygen Level :</Text>
-                        <Text style={styles.labelHeadings}>Heartbeat Rate :</Text>
+    const [isLoading, setLoading] = useState(true);
+    const [patientRecords, setpatientRecords] = useState({});
+
+    useEffect(() => {
+        getAllPatients()
+    }, []);
+
+    const getAllPatients = () => {
+        try {
+            fetch(API_URL + "/patients/getRecords", {
+                method: 'GET',
+                mode: 'no-cors',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(responseJson => {
+                    setpatientRecords(responseJson)
+                })
+                .catch(error => console.log(error))
+                .finally(() => setLoading(false))
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    if (typeof (patientRecords.statusCode) != 'undefined') {
+        if (patientRecords.statusCode == '200') {
+            return (
+                <View style={styles.containerBody}>
+                    <StatusBar style="auto" />
+                    <View style={styles.containerForm}>
+                        {isLoading ? <ActivityIndicator /> : (
+                            <FlatList
+                                data={patientRecords.record}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item }) => (
+                                    <ListItem item={item} />
+                                )}
+                            />
+                        )}
                     </View>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelRecords}>90/60 mm</Text>
-                        <Text style={styles.labelRecords}>12/min</Text>
-                        <Text style={styles.labelRecords}>98%</Text>
-                        <Text style={styles.labelRecords}>80/min</Text>
-                    </View>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelDate}>March 23, 2020</Text>
+                    <View style={styles.containerFloating}>
+                        <TouchableOpacity onPress={() => navigation.navigate("AddPatientRecord")}>
+                            <Image style={styles.listIcon} source={floatingButtonIcon} />
+                        </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.containerInput}>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelHeadings}>Blood Pressure :</Text>
-                        <Text style={styles.labelHeadings}>Respiratory Rate :</Text>
-                        <Text style={styles.labelHeadings}>Blood Oxygen Level :</Text>
-                        <Text style={styles.labelHeadings}>Heartbeat Rate :</Text>
-                    </View>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelRecords}>120/50 mm</Text>
-                        <Text style={styles.labelRecords}>12/min</Text>
-                        <Text style={styles.labelRecords}>98%</Text>
-                        <Text style={styles.labelRecords}>82/min</Text>
-                    </View>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelDate}>Feb 22, 2020</Text>
-                    </View>
-                </View>
-                <View style={styles.containerInput}>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelHeadings}>Blood Pressure :</Text>
-                        <Text style={styles.labelHeadings}>Respiratory Rate :</Text>
-                        <Text style={styles.labelHeadings}>Blood Oxygen Level :</Text>
-                        <Text style={styles.labelHeadings}>Heartbeat Rate :</Text>
-                    </View>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelRecords}>90/60 mm</Text>
-                        <Text style={styles.labelRecords}>12/min</Text>
-                        <Text style={styles.labelRecords}>98%</Text>
-                        <Text style={styles.labelRecords}>80/min</Text>
-                    </View>
-                    <View style={styles.containerLabel}>
-                        <Text style={styles.labelDate}>Jan 01, 2020</Text>
-                    </View>
+            );
+        }
+    }
+    else {
+        return (
+            <View style={styles.containerBody}>
+                <StatusBar style="auto" />
+                <View style={styles.containerFloating}>
+                    <TouchableOpacity onPress={() => navigation.navigate("AddPatientRecord")}>
+                        <Image style={styles.listIcon} source={floatingButtonIcon} />
+                    </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.containerFloating}>
-                <TouchableOpacity onPress={() => navigation.navigate("AddPatientRecord")}>
-                    <Image style={styles.listIcon} source={floatingButtonIcon} />
-                </TouchableOpacity>
+        )
+    }
+}
+
+function ListItem(props) {
+    return (
+        <View style={styles.containerInput}>
+            <View style={styles.containerLabel}>
+                <Text style={styles.labelHeadings}>Blood Pressure :</Text>
+                <Text style={styles.labelHeadings}>Respiratory Rate :</Text>
+                <Text style={styles.labelHeadings}>Blood Oxygen Level :</Text>
+                <Text style={styles.labelHeadings}>Heartbeat Rate :</Text>
+            </View>
+            <View style={styles.containerLabel}>
+                <Text style={styles.labelRecords}>{props.item.bloodPressure} mm</Text>
+                <Text style={styles.labelRecords}>{props.item.respiratoryRate}/min</Text>
+                <Text style={styles.labelRecords}>{props.item.oxygenLevel}%</Text>
+                <Text style={styles.labelRecords}>{props.item.heartbeatRate}/min</Text>
+            </View>
+            <View style={styles.containerLabel}>
+                <Text style={styles.labelDate}>March 23, 2020</Text>
             </View>
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({

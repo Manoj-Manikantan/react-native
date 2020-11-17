@@ -52,6 +52,7 @@ export default function PatientsList({ navigation }) {
     if (patientResponse.statusCode == '200') {
       return (
         <View style={styles.containerBody}>
+          <StatusBar style="auto" />
           <View style={styles.containerForm}>
             {isLoading ? <ActivityIndicator /> : (
               <FlatList
