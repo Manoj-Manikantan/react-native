@@ -43,7 +43,6 @@ export default function AddPatient({ navigation }) {
                     })
                 })
                     .then(response => response.json())
-                    .then(responseJson => console.log('getting data from fetch', responseJson))
                     .catch(error => console.log(error))
             } catch (e) {
                 console.log(e)
@@ -52,7 +51,6 @@ export default function AddPatient({ navigation }) {
             navigation.navigate("PatientsList")
         }
         else{
-            console.log("Else part called")
             Alert.alert('Please fill all the fields before submitting.')
         }
     }

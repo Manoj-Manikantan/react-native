@@ -5,12 +5,13 @@ Description : Records of patient screen
 */
 
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Image, Text, View, TouchableOpacity } from 'react-native';
 import floatingButtonIcon from '../src/images/ic_floating_button.png'
-
+import { API_URL } from '../constants/apiURL'
 
 export default function PatientRecord({ navigation }) {
+
     return (
         <View style={styles.containerBody}>
             <StatusBar style="auto" />
