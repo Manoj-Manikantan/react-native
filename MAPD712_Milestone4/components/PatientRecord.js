@@ -61,6 +61,7 @@ export default function PatientRecord({ navigation }) {
                         <TouchableOpacity onPress={() => navigation.navigate("AddPatientRecord")}>
                             <Image style={styles.listIcon} source={floatingButtonIcon} />
                         </TouchableOpacity>
+
                     </View>
                 </View>
             );

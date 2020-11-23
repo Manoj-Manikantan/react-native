@@ -6,7 +6,7 @@ Description : Add Patient Record Screen
 
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert } from 'react-native';
 import { API_URL } from '../constants/apiURL'
 
 export default function AddPatientRecord({ navigation }) {
