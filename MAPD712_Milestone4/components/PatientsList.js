@@ -92,12 +92,12 @@ export default function PatientsList({ navigation }) {
 
 function ListItem(props) {
   return (
-    <View style={styles.containerInput}>
+    <View style={styles.listContainer}>
       <Image style={styles.listIcon} source={maleAvatarIcon} />
-      <View style={styles.containerLabel}>
+      <View style={styles.listDetails}>
         <Text style={styles.labelUsername}>Name : {props.item.fullName}</Text>
         <Text style={styles.labelAge}>Age : {props.item.age}</Text>
-        <Text style={styles.labelMobile}>Phone Number : {props.item.mobileNum}</Text>
+        <Text style={styles.labelMobile}>Number : {props.item.mobileNum}</Text>
       </View>
       <Image style={styles.listSmallIcon} source={rightArrowIcon} />
     </View>
@@ -113,22 +113,6 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 10,
   },
-  containerLabel: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    marginLeft: 20,
-  },
-  containerInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderBottomWidth: 0.7,
-    borderBottomColor: '#78909c',
-  },
   containerFloating: {
     alignItems: "flex-end",
     alignSelf: "flex-end",
@@ -138,6 +122,7 @@ const styles = StyleSheet.create({
   listIcon: {
     width: 60,
     height: 60,
+    marginRight: 20
   },
   listIconRefresh: {
     width: 50,
@@ -146,17 +131,12 @@ const styles = StyleSheet.create({
   },
   listSmallIcon: {
     width: 30,
-    height: 30,
-  },
-  title: {
-    fontSize: 18,
-    marginTop: 20,
-    color: '#4dd0e1',
+    height: 30
   },
   labelUsername: {
     fontSize: 18,
     color: '#78909c',
-    fontWeight: '700',
+    fontWeight: '700'
   },
   labelMobile: {
     fontSize: 14,
@@ -167,4 +147,16 @@ const styles = StyleSheet.create({
     color: '#78909c',
     fontWeight: '100',
   },
+  listContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 20,
+    alignItems: 'center',
+    borderBottomWidth: 0.7,
+    borderBottomColor: '#78909c'
+  },
+  listDetails: {
+    width: 240,
+    height: 50
+  }
 });
