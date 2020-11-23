@@ -13,7 +13,6 @@ import refreshIcon from '../src/images/ic_refresh.png'
 import { StyleSheet, Image, TouchableOpacity, Text, View, ActivityIndicator, FlatList } from 'react-native';
 import { API_URL } from '../constants/apiURL'
 
-
 export default function PatientsList({ navigation }) {
 
   const [isLoading, setLoading] = useState(true);
@@ -46,6 +45,26 @@ export default function PatientsList({ navigation }) {
 
   const refreshPatientListAPI = () => {
     getAllPatients()
+  }
+
+  const arrowOnClick = (userId) => {
+    navigation.navigate("PatientInformation", userId)
+  }
+
+  const ListItem = (props) => {
+    return (
+      <View style={styles.listContainer}>
+        <Image style={styles.listIcon} source={maleAvatarIcon} />
+        <View style={styles.listDetails}>
+          <Text style={styles.labelUsername}>Name : {props.item.fullName}</Text>
+          <Text style={styles.labelAge}>Age : {props.item.age}</Text>
+          <Text style={styles.labelMobile}>Number : {props.item.mobileNum}</Text>
+        </View>
+        <TouchableOpacity onPress={() => arrowOnClick(props.item._id)}>
+          <Image style={styles.listSmallIcon} source={rightArrowIcon} />
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   if (typeof (patientResponse.statusCode) != 'undefined') {
@@ -88,20 +107,6 @@ export default function PatientsList({ navigation }) {
       </View>
     );
   }
-}
-
-function ListItem(props) {
-  return (
-    <View style={styles.listContainer}>
-      <Image style={styles.listIcon} source={maleAvatarIcon} />
-      <View style={styles.listDetails}>
-        <Text style={styles.labelUsername}>Name : {props.item.fullName}</Text>
-        <Text style={styles.labelAge}>Age : {props.item.age}</Text>
-        <Text style={styles.labelMobile}>Number : {props.item.mobileNum}</Text>
-      </View>
-      <Image style={styles.listSmallIcon} source={rightArrowIcon} />
-    </View>
-  )
 }
 
 const styles = StyleSheet.create({

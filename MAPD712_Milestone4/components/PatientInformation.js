@@ -5,47 +5,89 @@ Description : View patient's information screen
 */
 
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import maleAvatarIcon from '../src/images/ic_avatar_male.png'
-import { StyleSheet, Image, TouchableOpacity, Text, View } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
+import { API_URL } from '../constants/apiURL'
 
-export default function PatientsList({ navigation }) {
-    return (
-        <View style={styles.containerBody}>
-            <StatusBar style="auto" />
-            <View style={styles.containerForm}>
-                <View style={styles.containerInput}>
-                    <View style={styles.containerImage}>
-                        <Image style={styles.imageIcon} source={maleAvatarIcon} />
-                    </View>
-                    <Text style={styles.labelPatientName}>John Snow</Text>
+export default function PatientInformation({ route, navigation }) {
+
+    const [isLoading, setLoading] = useState(true);
+    const [patientInfo, setPatientInfo] = useState({});
+
+    useEffect(() => {
+        getPatientById()
+    }, []);
+
+    const getPatientById = () => {
+        try {
+            fetch(API_URL + "/patients/detail", {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    patientId: route.params,
+                })
+            })
+                .then(response => response.json())
+                .then(responseJson => {
+                    setPatientInfo(responseJson)
+                })
+                .catch(error => console.log(error))
+                .finally(() => setLoading(false))
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    if (typeof (patientInfo.statusCode) != 'undefined') {
+        if (patientInfo.statusCode == '200') {
+            return (
+                <View style={styles.containerBody}>
+                    <StatusBar style="auto" />
+                    {isLoading ? <ActivityIndicator /> : (
+                        <View style={styles.containerForm}>
+                            <View style={styles.containerInput}>
+                                <View style={styles.containerImage}>
+                                    <Image style={styles.imageIcon} source={maleAvatarIcon} />
+                                </View>
+                                <Text style={styles.labelPatientName}>{patientInfo.patient.fullName}</Text>
+                            </View>
+                            <View style={styles.containerInformationBody}>
+                                <View style={styles.containerInformationLabel}>
+                                    <Text style={styles.labelHeadings}>Email Id :</Text>
+                                    <Text style={styles.labelHeadings}>Phone Number :</Text>
+                                    <Text style={styles.labelHeadings}>Age :</Text>
+                                    <Text style={styles.labelHeadings}>Blood Group :</Text>
+                                    <Text style={styles.labelHeadings}>Address :</Text>
+                                </View>
+                                <View style={styles.containerInformation}>
+                                    <Text style={styles.labelPatientInfo}>{patientInfo.patient.fullName}</Text>
+                                    <Text style={styles.labelPatientInfo}>{patientInfo.patient.mobileNum}</Text>
+                                    <Text style={styles.labelPatientInfo}>{patientInfo.patient.age}</Text>
+                                    <Text style={styles.labelPatientInfo}>{patientInfo.patient.bloodType}</Text>
+                                    <Text style={styles.labelPatientInfo}>{patientInfo.patient.address}</Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.containerBottom}>
+                                <TouchableOpacity onPress={() => navigation.navigate("PatientRecord")} style={styles.containerButton}>
+                                    <Text style={styles.buttonText}>View Records</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>)}
                 </View>
-                <View style={styles.containerInformationBody}>
-                    <View style={styles.containerInformationLabel}>
-                        <Text style={styles.labelHeadings}>Email Id :</Text>
-                        <Text style={styles.labelHeadings}>Phone Number :</Text>
-                        <Text style={styles.labelHeadings}>Age :</Text>
-                        <Text style={styles.labelHeadings}>Blood Group :</Text>
-                        <Text style={styles.labelHeadings}>Address :</Text>
-                    </View>
-                    <View style={styles.containerInformation}>
-                        <Text style={styles.labelPatientInfo}>Johnsnow@gmail.com</Text>
-                        <Text style={styles.labelPatientInfo}>+1 226 776 3389</Text>
-                        <Text style={styles.labelPatientInfo}>30</Text>
-                        <Text style={styles.labelPatientInfo}>A+</Text>
-                        <Text style={styles.labelPatientInfo}>46, Spruce Street, Waterloo, ON</Text>
-                    </View>
-                </View>
-            
-                <View style={styles.containerBottom}>
-                    <TouchableOpacity onPress={() => navigation.navigate("PatientRecord")} style={styles.containerButton}>
-                        <Text style={styles.buttonText}>View Records</Text>
-                    </TouchableOpacity>
-                </View>
-        
-            </View>
-        </View>
-    );
+            );
+        }
+    }
+    else{
+        return(
+            <ActivityIndicator />
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -89,7 +131,7 @@ const styles = StyleSheet.create({
     containerBottom: {
         flexDirection: 'row',
         alignItems: 'flex-start',
-        marginBottom:20,
+        marginBottom: 20,
     },
     containerInformationLabel: {
         flexDirection: 'column',
