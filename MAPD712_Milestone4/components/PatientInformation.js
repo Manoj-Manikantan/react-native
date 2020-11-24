@@ -72,19 +72,19 @@ export default function PatientInformation({ route, navigation }) {
                                     <Text style={styles.labelPatientInfo}>{patientInfo.patient.address}</Text>
                                 </View>
                             </View>
-
                             <View style={styles.containerBottom}>
-                                <TouchableOpacity onPress={() => navigation.navigate("PatientRecord")} style={styles.containerButton}>
+                                <TouchableOpacity onPress={() => navigation.navigate("PatientRecord",patientInfo.patient._id)} style={styles.containerButton}>
                                     <Text style={styles.buttonText}>View Records</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>)}
                 </View>
             );
+
         }
     }
-    else{
-        return(
+    else {
+        return (
             <ActivityIndicator />
         )
     }

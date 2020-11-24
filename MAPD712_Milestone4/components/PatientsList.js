@@ -17,7 +17,7 @@ export default function PatientsList({ route, navigation }) {
 
   const [isLoading, setLoading] = useState(true);
   const [patientResponse, setPatientResponse] = useState({});
-  const [doctorId, setDoctorId] = useState("  ")
+  const [doctorId, setDoctorId] = useState("")
 
   useEffect(() => {
     setDoctorId(route.params)
@@ -34,7 +34,7 @@ export default function PatientsList({ route, navigation }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          doctorId: doctorId,
+          doctorId: route.params,
         })
       })
         .then(response => response.json())
@@ -106,14 +106,10 @@ export default function PatientsList({ route, navigation }) {
         </View>
       )
     } else {
-      return (
-        <AddRefreshPatient />
-      )
+      return (<AddRefreshPatient />)
     }
   } else {
-    return (
-      <AddRefreshPatient />
-    )
+    return (<AddRefreshPatient />)
   }
 }
 

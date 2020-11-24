@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert } from 'react-native';
 import { API_URL } from '../constants/apiURL'
 
-export default function AddPatientRecord({ navigation }) {
+export default function AddPatientRecord({ route, navigation }) {
 
     const [bloodPressure, setbloodPressure] = useState('');
     const [respiratoryRate, setrespiratoryRate] = useState('');
@@ -30,7 +30,8 @@ export default function AddPatientRecord({ navigation }) {
                         bloodPressure: bloodPressure,
                         respiratoryRate: respiratoryRate,
                         oxygenLevel: oxygenLevel,
-                        heartbeatRate: heartbeatRate
+                        heartbeatRate: heartbeatRate,
+                        patientId: route.params
                     })
                 })
                     .then(response => response.json())

@@ -11,24 +11,29 @@ import floatingButtonIcon from '../src/images/ic_floating_button.png'
 import refreshIcon from '../src/images/ic_refresh.png'
 import { API_URL } from '../constants/apiURL'
 
-export default function PatientRecord({ navigation }) {
+export default function PatientRecord({ route, navigation }) {
 
     const [isLoading, setLoading] = useState(true);
     const [patientRecords, setpatientRecords] = useState({});
+    const [patientId, setPatientId] = useState("")
 
     useEffect(() => {
-        getAllPatients()
+        setPatientId(route.params)
+        getAllPatientRecords()
     }, []);
 
-    const getAllPatients = () => {
+    const getAllPatientRecords = () => {
         try {
             fetch(API_URL + "/patients/getRecords", {
-                method: 'GET',
+                method: 'POST',
                 mode: 'no-cors',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                }
+                },
+                body: JSON.stringify({
+                    patientId: route.params,
+                })
             })
                 .then(response => response.json())
                 .then(responseJson => {
@@ -41,6 +46,23 @@ export default function PatientRecord({ navigation }) {
         }
     }
 
+    const refreshPatientRecords = () => {
+        getAllPatientRecords()
+    }
+
+    const AddRefreshPatientRecords = () => {
+        return (
+            <View style={styles.containerFloating}>
+                <TouchableOpacity onPress={() => refreshPatientRecords()}>
+                    <Image style={styles.listIconRefresh} source={refreshIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("AddPatientRecord", patientId)}>
+                    <Image style={styles.listIcon} source={floatingButtonIcon} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     if (typeof (patientRecords.statusCode) != 'undefined') {
         if (patientRecords.statusCode == '200') {
             return (
@@ -49,7 +71,7 @@ export default function PatientRecord({ navigation }) {
                     <View style={styles.containerForm}>
                         {isLoading ? <ActivityIndicator /> : (
                             <FlatList
-                                data={patientRecords.record}
+                                data={patientRecords.records}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item }) => (
                                     <ListItem item={item} />
@@ -57,27 +79,15 @@ export default function PatientRecord({ navigation }) {
                             />
                         )}
                     </View>
-                    <View style={styles.containerFloating}>
-                        <TouchableOpacity onPress={() => navigation.navigate("AddPatientRecord")}>
-                            <Image style={styles.listIcon} source={floatingButtonIcon} />
-                        </TouchableOpacity>
-
-                    </View>
+                    <AddRefreshPatientRecords />
                 </View>
             );
+        } else {
+            return (<AddRefreshPatientRecords />)
         }
     }
     else {
-        return (
-            <View style={styles.containerBody}>
-                <StatusBar style="auto" />
-                <View style={styles.containerFloating}>
-                    <TouchableOpacity onPress={() => navigation.navigate("AddPatientRecord")}>
-                        <Image style={styles.listIcon} source={floatingButtonIcon} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
+        return (<AddRefreshPatientRecords />)
     }
 }
 
@@ -127,11 +137,19 @@ const styles = StyleSheet.create({
     },
     containerFloating: {
         alignItems: "flex-end",
+        alignSelf: "flex-end",
+        flexDirection: 'row',
         padding: 20
     },
     listIcon: {
         width: 60,
-        height: 60
+        height: 60,
+        marginRight: 20
+    },
+    listIconRefresh: {
+        width: 50,
+        height: 50,
+        margin: 10,
     },
     labelHeadings: {
         fontSize: 14,
