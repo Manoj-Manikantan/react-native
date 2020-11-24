@@ -100,13 +100,13 @@ function ListItem(props) {
                 <Text style={styles.labelHeadings}>Blood Oxygen Level :</Text>
                 <Text style={styles.labelHeadings}>Heartbeat Rate :</Text>
             </View>
-            <View style={styles.containerLabel}>
+            <View style={styles.containerData}>
                 <Text style={styles.labelRecords}>{props.item.bloodPressure} mm</Text>
                 <Text style={styles.labelRecords}>{props.item.respiratoryRate}/min</Text>
                 <Text style={styles.labelRecords}>{props.item.oxygenLevel}%</Text>
                 <Text style={styles.labelRecords}>{props.item.heartbeatRate}/min</Text>
             </View>
-            <View style={styles.containerLabel}>
+            <View style={styles.containerData}>
                 <Text style={styles.labelDate}>March 23, 2020</Text>
             </View>
         </View>
@@ -123,9 +123,17 @@ const styles = StyleSheet.create({
         margin: 10
     },
     containerLabel: {
+        flex: 2,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        alignSelf: 'stretch',
+        marginLeft: 20
+    },
+    containerData: {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'flex-start',
+        alignSelf: 'stretch',
         marginLeft: 20
     },
     containerInput: {
@@ -133,7 +141,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 10,
         borderBottomWidth: 0.7,
-        borderBottomColor: '#78909c'
+        borderBottomColor: '#78909c',
+        alignSelf: 'stretch'
     },
     containerFloating: {
         alignItems: "flex-end",
@@ -152,18 +161,24 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     labelHeadings: {
+        flex: 1,
         fontSize: 14,
         color: '#78909c',
-        fontWeight: '700'
+        fontWeight: '700',
+        alignSelf: 'stretch'
     },
     labelRecords: {
+        flex: 1,
         fontSize: 12,
         color: '#78909c',
-        fontWeight: '300'
+        fontWeight: '300',
+        alignSelf: 'stretch'
     },
     labelDate: {
+        flex: 1,
         fontSize: 11,
         color: '#78909c',
-        fontWeight: '300'
+        fontWeight: '300',
+        alignSelf: 'stretch'
     }
 });

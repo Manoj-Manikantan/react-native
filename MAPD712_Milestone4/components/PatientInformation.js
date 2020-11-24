@@ -72,8 +72,9 @@ export default function PatientInformation({ route, navigation }) {
                                     <Text style={styles.labelPatientInfo}>{patientInfo.patient.address}</Text>
                                 </View>
                             </View>
+
                             <View style={styles.containerBottom}>
-                                <TouchableOpacity onPress={() => navigation.navigate("PatientRecord",patientInfo.patient._id)} style={styles.containerButton}>
+                                <TouchableOpacity onPress={() => navigation.navigate("PatientRecord", patientInfo.patient._id)} style={styles.containerButton}>
                                     <Text style={styles.buttonText}>View Records</Text>
                                 </TouchableOpacity>
                             </View>
@@ -93,12 +94,11 @@ export default function PatientInformation({ route, navigation }) {
 const styles = StyleSheet.create({
     containerBody: {
         flex: 1,
-        backgroundColor: '#fff',
     },
     containerForm: {
         flex: 1,
         margin: 10,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     containerImage: {
         alignItems: "center",
@@ -112,6 +112,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#78909c',
         fontWeight: '700',
+        alignSelf: 'stretch',
+        textAlign:'center'
     },
     containerInput: {
         alignItems: 'center',
@@ -119,14 +121,14 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10,
-        borderBottomWidth: 0.7,
+        borderBottomWidth: 1.2,
         marginBottom: 40,
-        borderBottomColor: '#78909c'
+        borderBottomColor: '#78909c',
+        alignSelf: 'stretch'
     },
     containerInformationBody: {
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-start',
     },
     containerBottom: {
         flexDirection: 'row',
@@ -134,12 +136,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     containerInformationLabel: {
+        flex:1,
         flexDirection: 'column',
-        alignItems: 'flex-start',
     },
     containerInformation: {
+        flex:1,
         flexDirection: 'column',
-        alignItems: 'flex-end',
     },
     labelHeadings: {
         alignItems: 'flex-start',
@@ -147,12 +149,13 @@ const styles = StyleSheet.create({
         padding: 10,
         color: '#78909c',
         fontWeight: '700',
+        textAlign: 'right'
     },
     labelPatientInfo: {
-        alignItems: 'flex-start',
         fontSize: 14,
         padding: 10,
         color: '#78909c',
+        marginTop: 2,
         fontWeight: '300',
     },
     containerButton: {
@@ -168,5 +171,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontWeight: 'bold',
+    },
+    mainContainer: {
+        alignItems: 'center',
+        backgroundColor: '#fff',
     }
 });
