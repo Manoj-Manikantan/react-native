@@ -50,7 +50,7 @@ export default function Login({ navigation }) {
     }
     else if (loginData.statusCode == "200") {
       Alert.alert('Login successful')
-      navigation.navigate("PatientsList")
+      navigation.navigate("PatientsList",loginData.doctor._id)
     }
   }
 

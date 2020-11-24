@@ -13,27 +13,33 @@ import refreshIcon from '../src/images/ic_refresh.png'
 import { StyleSheet, Image, TouchableOpacity, Text, View, ActivityIndicator, FlatList } from 'react-native';
 import { API_URL } from '../constants/apiURL'
 
-export default function PatientsList({ navigation }) {
+export default function PatientsList({ route, navigation }) {
 
   const [isLoading, setLoading] = useState(true);
   const [patientResponse, setPatientResponse] = useState({});
+  const [doctorId, setDoctorId] = useState("  ")
 
   useEffect(() => {
+    setDoctorId(route.params)
     getAllPatients()
   }, []);
 
   const getAllPatients = () => {
     try {
       fetch(API_URL + "/patients", {
-        method: 'GET',
+        method: 'POST',
         mode: 'no-cors',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({
+          doctorId: doctorId,
+        })
       })
         .then(response => response.json())
         .then(responseJson => {
+          console.log(responseJson)
           setPatientResponse(responseJson)
         })
         .catch(error => console.log(error))
@@ -49,6 +55,19 @@ export default function PatientsList({ navigation }) {
 
   const arrowOnClick = (userId) => {
     navigation.navigate("PatientInformation", userId)
+  }
+
+  const AddRefreshPatient = () => {
+    return (
+      <View style={styles.containerFloating}>
+        <TouchableOpacity onPress={() => refreshPatientListAPI()}>
+          <Image style={styles.listIconRefresh} source={refreshIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("AddPatient", doctorId)}>
+          <Image style={styles.listIconRefresh} source={floatingButtonIcon} />
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   const ListItem = (props) => {
@@ -75,7 +94,7 @@ export default function PatientsList({ navigation }) {
           <View style={styles.containerForm}>
             {isLoading ? <ActivityIndicator /> : (
               <FlatList
-                data={patientResponse.patient}
+                data={patientResponse.patients}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <ListItem item={item} />
@@ -83,29 +102,18 @@ export default function PatientsList({ navigation }) {
               />
             )}
           </View>
-          <View style={styles.containerFloating}>
-            <TouchableOpacity onPress={() => refreshPatientListAPI()}>
-              <Image style={styles.listIconRefresh} source={refreshIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("AddPatient")}>
-              <Image style={styles.listIconRefresh} source={floatingButtonIcon} />
-            </TouchableOpacity>
-          </View>
+          <AddRefreshPatient />
         </View>
-      );
+      )
+    } else {
+      return (
+        <AddRefreshPatient />
+      )
     }
-  }
-  else {
+  } else {
     return (
-      <View style={styles.containerBody}>
-        <StatusBar style="auto" />
-        <View style={styles.containerFloating}>
-          <TouchableOpacity onPress={() => navigation.navigate("AddPatient")}>
-            <Image style={styles.listIcon} source={floatingButtonIcon} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
+      <AddRefreshPatient />
+    )
   }
 }
 

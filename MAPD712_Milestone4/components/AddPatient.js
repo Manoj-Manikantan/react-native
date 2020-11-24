@@ -14,7 +14,7 @@ import addPatientIcon from '../src/images/ic_addPatient.png'
 import { StyleSheet, TextInput, Image, TouchableOpacity, Text, View, Picker, Alert } from 'react-native';
 import { API_URL } from '../constants/apiURL'
 
-export default function AddPatient({ navigation }) {
+export default function AddPatient({ route, navigation }) {
 
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
@@ -26,7 +26,7 @@ export default function AddPatient({ navigation }) {
     const onAddPatientClicked = () => {
         if (userName != "" && email != "" && phoneNum != "" && age != "" && address != "" && bloodType != "") {
             try {
-                fetch(API_URL + "/patients", {
+                fetch(API_URL + "/addPatient", {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
@@ -40,9 +40,13 @@ export default function AddPatient({ navigation }) {
                         age: age,
                         bloodType: bloodType,
                         address: address,
+                        doctorId: route.params
                     })
                 })
                     .then(response => response.json())
+                    .then(responseJson => {
+                        console.log(responseJson)
+                    })
                     .catch(error => console.log(error))
             } catch (e) {
                 console.log(e)
